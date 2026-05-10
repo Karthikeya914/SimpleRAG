@@ -106,8 +106,8 @@ async def upload_pdf(
 
     # Chunking
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200
+        chunk_size=3000,
+        chunk_overlap=300
     )
 
     chunks = text_splitter.split_documents(
@@ -115,21 +115,24 @@ async def upload_pdf(
     )
 
     # Embeddings
-    # Embeddings
     embeddings = GoogleGenerativeAIEmbeddings(
-
-    model="gemini-embedding-001",
-
-    google_api_key=os.getenv("GEMINI_API_KEY")
-
+        model="models/embedding-001"
     )
 
     # Store in ChromaDB
-    Chroma.from_documents(
-        documents=chunks,
-        embedding=embeddings,
-        persist_directory="chroma_db"
-    )
+    try:
+
+        Chroma.from_documents(
+            documents=chunks,
+            embedding=embeddings,
+            persist_directory="chroma_db"
+        )
+
+    except Exception as e:
+
+        return {
+            "detail": str(e)
+        }
 
     return {
         "message": "PDF uploaded successfully",
@@ -150,13 +153,8 @@ async def chat(
     user_query = request.query
 
     # Embeddings
-    # Embeddings
     embeddings = GoogleGenerativeAIEmbeddings(
-
-    model="models/embedding-001",
-
-    google_api_key=os.getenv("GEMINI_API_KEY")
-
+        model="models/embedding-001"
     )
 
     # Load Vector DB
