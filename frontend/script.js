@@ -119,8 +119,23 @@ async function askQuestion() {
 
         const data = await response.json();
 
-        document.getElementById("answerBox").innerText =
-            data.answer;
+        if (data.answer) {
+
+            document.getElementById("answerBox").innerText =
+                data.answer;
+        }
+
+        else if (data.detail) {
+
+            document.getElementById("answerBox").innerText =
+                data.detail;
+        }
+
+        else {
+
+            document.getElementById("answerBox").innerText =
+                "Something went wrong.";
+        }
     }
 
     catch (error) {
