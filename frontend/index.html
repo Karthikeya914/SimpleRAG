@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NotebookLM RAG</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>📘 NotebookLM RAG</h1>
+
+    <p class="subtitle">
+      Upload any PDF and chat with it using AI.
+    </p>
+
+    <div class="upload-section">
+
+      <input type="file" id="pdfFile">
+
+      <button onclick="uploadPDF()">
+        Upload PDF
+      </button>
+
+    </div>
+
+    <div id="uploadedFile" class="uploaded-file">
+      No PDF uploaded yet
+    </div>
+
+    <div class="chat-section">
+
+      <textarea
+        id="question"
+        placeholder="Ask a question from the uploaded PDF..."
+      ></textarea>
+
+      <button onclick="askQuestion()">
+        Ask Question
+      </button>
+
+    </div>
+
+    <div id="loader" class="loader hidden">
+      🤖 AI is thinking...
+    </div>
+
+    <div id="answerBox">
+      Your answer will appear here...
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
