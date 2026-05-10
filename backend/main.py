@@ -116,7 +116,7 @@ async def upload_pdf(
 
     # Embeddings
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001"
+        model="gemini-embedding-001"
     )
 
     # Store in ChromaDB
@@ -154,7 +154,7 @@ async def chat(
 
     # Embeddings
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001"
+        model="gemini-embedding-001"
     )
 
     # Load Vector DB
