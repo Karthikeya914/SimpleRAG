@@ -29,12 +29,12 @@ from langchain_community.vectorstores import Chroma
 load_dotenv()
 
 
-
 # =========================
 # FASTAPI APP
 # =========================
 
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -46,7 +46,7 @@ app.add_middleware(
 
 
 # =========================
-# OPENAI CLIENT
+# OPENROUTER CLIENT
 # =========================
 
 client = OpenAI(
@@ -61,6 +61,19 @@ client = OpenAI(
 
 class QueryRequest(BaseModel):
     query: str
+
+
+# =========================
+# ROOT ROUTE
+# =========================
+
+@app.get("/")
+
+async def root():
+
+    return {
+        "message": "RAG Backend Running"
+    }
 
 
 # =========================
@@ -80,6 +93,7 @@ async def upload_pdf(
 
     # Save uploaded file
     with open(file_path, "wb") as buffer:
+
         shutil.copyfileobj(
             file.file,
             buffer
@@ -102,17 +116,15 @@ async def upload_pdf(
 
     # Embeddings
     embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
 
     # Store in ChromaDB
-    vector_store = Chroma.from_documents(
+    Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
         persist_directory="chroma_db"
     )
-
-    vector_store.persist()
 
     return {
         "message": "PDF uploaded successfully",
@@ -134,10 +146,10 @@ async def chat(
 
     # Embeddings
     embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
 
-    # Load vector DB
+    # Load Vector DB
     vector_store = Chroma(
         persist_directory="chroma_db",
         embedding_function=embeddings
@@ -153,13 +165,13 @@ async def chat(
         user_query
     )
 
-    # Build context
+    # Build Context
     context = "\n\n".join([
         doc.page_content
         for doc in searched_chunks
     ])
 
-    # Prompt
+    # System Prompt
     system_prompt = f"""
 You are an AI assistant.
 
@@ -167,6 +179,7 @@ Answer ONLY from the provided PDF context.
 
 If the answer is not present in the context,
 say:
+
 "I could not find the answer in the uploaded document."
 
 Context:
