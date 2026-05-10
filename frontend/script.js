@@ -13,37 +13,73 @@ async function uploadPDF() {
         return;
     }
 
+    const progressContainer =
+        document.getElementById("progressContainer");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    progressContainer.classList.remove("hidden");
+
+    progressBar.style.width = "0%";
+
+    progressBar.innerText = "0%";
+
     const formData = new FormData();
 
     formData.append("file", file);
 
-    try {
+    const xhr = new XMLHttpRequest();
 
-        const response = await fetch(
-            `${BACKEND_URL}/upload`,
-            {
-                method: "POST",
-                body: formData
-            }
-        );
+    xhr.open(
+        "POST",
+        `${BACKEND_URL}/upload`
+    );
 
-        const data = await response.json();
+    xhr.upload.onprogress = function(event) {
 
-        document.getElementById("uploadedFile").innerText =
-            `✅ Uploaded PDF: ${file.name}`;
+        if (event.lengthComputable) {
 
-        alert(data.message);
-    }
+            const percent = Math.round(
+                (event.loaded / event.total) * 100
+            );
 
-    catch (error) {
+            progressBar.style.width = `${percent}%`;
 
-        console.error(error);
+            progressBar.innerText = `${percent}%`;
+        }
+    };
+
+    xhr.onload = function() {
+
+        if (xhr.status === 200) {
+
+            document.getElementById("uploadedFile").innerText =
+                `✅ Uploaded PDF: ${file.name}`;
+
+            progressBar.style.width = "100%";
+
+            progressBar.innerText = "Upload Complete";
+        }
+
+        else {
+
+            document.getElementById("uploadedFile").innerText =
+                "❌ Upload failed";
+
+            alert("Upload failed");
+        }
+    };
+
+    xhr.onerror = function() {
 
         document.getElementById("uploadedFile").innerText =
             "❌ Upload failed";
 
         alert("Upload failed");
-    }
+    };
+
+    xhr.send(formData);
 }
 
 

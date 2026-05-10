@@ -184,26 +184,34 @@ Context:
 {context}
 """
 
-    # LLM Call
-    response = client.chat.completions.create(
+    try:
 
-        model="openai/gpt-4o-mini",
+        # LLM Call
+        response = client.chat.completions.create(
 
-        messages=[
+            model="openai/gpt-4o-mini",
 
-            {
-                "role": "system",
-                "content": system_prompt
-            },
+            messages=[
 
-            {
-                "role": "user",
-                "content": user_query
-            }
-        ]
-    )
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
 
-    answer = response.choices[0].message.content
+                {
+                    "role": "user",
+                    "content": user_query
+                }
+            ]
+        )
+
+        answer = response.choices[0].message.content
+
+    except Exception as e:
+
+        return {
+            "detail": str(e)
+        }
 
     return {
         "answer": answer
