@@ -17,7 +17,7 @@ from langchain_community.document_loaders import PyPDFLoader
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 from langchain_community.vectorstores import Chroma
 
@@ -116,7 +116,13 @@ async def upload_pdf(
 
     # Embeddings
     # Embeddings
-    embeddings = FastEmbedEmbeddings()
+    embeddings = GoogleGenerativeAIEmbeddings(
+
+    model="models/embedding-001",
+
+    google_api_key=os.getenv("GEMINI_API_KEY")
+
+    )
 
     # Store in ChromaDB
     Chroma.from_documents(
@@ -145,7 +151,13 @@ async def chat(
 
     # Embeddings
     # Embeddings
-    embeddings = FastEmbedEmbeddings()
+    embeddings = GoogleGenerativeAIEmbeddings(
+
+    model="models/embedding-001",
+
+    google_api_key=os.getenv("GEMINI_API_KEY")
+
+    )
 
     # Load Vector DB
     vector_store = Chroma(

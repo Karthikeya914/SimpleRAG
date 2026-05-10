@@ -5,8 +5,9 @@ openai
 langchain
 langchain-community
 langchain-text-splitters
-fastembed
 chromadb
 pypdf
 python-multipart
 tiktoken
+langchain-google-genai
+google-generativeai
