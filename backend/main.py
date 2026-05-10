@@ -17,7 +17,7 @@ from langchain_community.document_loaders import PyPDFLoader
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 
 from langchain_community.vectorstores import Chroma
 
@@ -115,9 +115,8 @@ async def upload_pdf(
     )
 
     # Embeddings
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
-    )
+    # Embeddings
+    embeddings = FastEmbedEmbeddings()
 
     # Store in ChromaDB
     Chroma.from_documents(
@@ -145,9 +144,8 @@ async def chat(
     user_query = request.query
 
     # Embeddings
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
-    )
+    # Embeddings
+    embeddings = FastEmbedEmbeddings()
 
     # Load Vector DB
     vector_store = Chroma(
