@@ -183,7 +183,7 @@ async def chat(
     system_prompt = f"""
 You are an AI assistant.
 
-Answer ONLY from the provided PDF context.
+Answer from the provided PDF context.
 
 If the answer is not present in the context,
 say:
