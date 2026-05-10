@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://simplerag-ljmv.onrender.com/";
+const BACKEND_URL = "https://simplerag-ljmv.onrender.com";
 
 
 async function uploadPDF() {
