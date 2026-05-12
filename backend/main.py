@@ -106,13 +106,16 @@ async def upload_pdf(
 
     # Chunking
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=3000,
-        chunk_overlap=300
+        chunk_size=2000,
+        chunk_overlap=200
     )
 
     chunks = text_splitter.split_documents(
         documents
     )
+
+    # Limit chunks to avoid Gemini quota issues
+    chunks = chunks[:40]
 
     # Embeddings
     embeddings = GoogleGenerativeAIEmbeddings(
@@ -165,7 +168,7 @@ async def chat(
 
     # Retriever
     retriever = vector_store.as_retriever(
-        search_kwargs={"k": 3}
+        search_kwargs={"k": 6}
     )
 
     # Retrieve similar chunks
@@ -179,16 +182,17 @@ async def chat(
         for doc in searched_chunks
     ])
 
-    # System Prompt
+    # Better System Prompt
     system_prompt = f"""
-You are an AI assistant.
+You are an AI assistant helping users understand uploaded PDF documents.
 
-Answer from the provided PDF context.
+Use the provided context to answer the question as accurately as possible.
 
-If the answer is not present in the context,
-say:
+If the exact answer is not directly available, try to infer the answer from the relevant context.
 
-"I could not find the answer in the uploaded document."
+Give concise and helpful answers based on the document context.
+
+Only say "I could not find the answer in the uploaded document" if the context is completely unrelated to the question.
 
 Context:
 {context}
