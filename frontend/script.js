@@ -21,9 +21,8 @@ async function uploadPDF() {
 
     progressContainer.classList.remove("hidden");
 
-    progressBar.style.width = "0%";
-
-    progressBar.innerText = "0%";
+    progressBar.style.width = "100%";
+    progressBar.innerText = "Uploading PDF...";
 
     const formData = new FormData();
 
@@ -54,18 +53,27 @@ async function uploadPDF() {
 
         if (xhr.status === 200) {
 
-            document.getElementById("uploadedFile").innerText =
-                `✅ Uploaded PDF: ${file.name}`;
-
-            progressBar.style.width = "100%";
+            document.getElementById("uploadedFile").innerHTML =
+                `
+                ✅ Uploaded PDF: ${file.name}
+                <button onclick="deletePDF()" class="delete-btn">
+                    Delete
+                </button>
+                `;
 
             progressBar.innerText = "Upload Complete";
+
+            setTimeout(() => {
+                progressContainer.classList.add("hidden");
+            }, 1000);
         }
 
         else {
 
             document.getElementById("uploadedFile").innerText =
                 "❌ Upload failed";
+
+            progressContainer.classList.add("hidden");
 
             alert("Upload failed");
         }
@@ -75,6 +83,8 @@ async function uploadPDF() {
 
         document.getElementById("uploadedFile").innerText =
             "❌ Upload failed";
+
+        progressContainer.classList.add("hidden");
 
         alert("Upload failed");
     };
@@ -87,6 +97,8 @@ async function askQuestion() {
 
     const question =
         document.getElementById("question").value;
+
+    document.getElementById("question").value = "";
 
     if (!question) {
         alert("Please enter a question");
@@ -150,4 +162,12 @@ async function askQuestion() {
 
         loader.classList.add("hidden");
     }
+}
+
+function deletePDF() {
+
+    document.getElementById("uploadedFile").innerText =
+        "No PDF uploaded yet";
+
+    document.getElementById("pdfFile").value = "";
 }
