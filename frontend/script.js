@@ -35,20 +35,6 @@ async function uploadPDF() {
         `${BACKEND_URL}/upload`
     );
 
-    xhr.upload.onprogress = function(event) {
-
-        if (event.lengthComputable) {
-
-            const percent = Math.round(
-                (event.loaded / event.total) * 100
-            );
-
-            progressBar.style.width = `${percent}%`;
-
-            progressBar.innerText = `${percent}%`;
-        }
-    };
-
     xhr.onload = function() {
 
         if (xhr.status === 200) {
@@ -61,7 +47,7 @@ async function uploadPDF() {
                 </button>
                 `;
 
-            progressBar.innerText = "Upload Complete";
+            progressBar.innerText = "Uploaded Successfully";
 
             setTimeout(() => {
                 progressContainer.classList.add("hidden");
