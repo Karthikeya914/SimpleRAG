@@ -176,9 +176,7 @@ async def chat(
         user_query
     )
 
-    # =========================
     # CORRECTIVE RAG CHECK
-    # =========================
 
     # If retrieval quality is poor,
     # retry with more chunks
