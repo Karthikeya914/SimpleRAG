@@ -176,11 +176,44 @@ async def chat(
         user_query
     )
 
+    # =========================
+    # CORRECTIVE RAG CHECK
+    # =========================
+
+    # If retrieval quality is poor,
+    # retry with more chunks
+    if len(searched_chunks) < 3:
+
+        retriever = vector_store.as_retriever(
+            search_kwargs={"k": 10}
+        )
+
+        searched_chunks = retriever.invoke(
+            user_query
+        )
+
     # Build Context
     context = "\n\n".join([
         doc.page_content
         for doc in searched_chunks
     ])
+
+    # Additional corrective check
+    # Retry retrieval if context is too small
+    if len(context.strip()) < 300:
+
+        retriever = vector_store.as_retriever(
+            search_kwargs={"k": 12}
+        )
+
+        searched_chunks = retriever.invoke(
+            user_query
+        )
+
+        context = "\n\n".join([
+            doc.page_content
+            for doc in searched_chunks
+        ])
 
     # Better System Prompt
     system_prompt = f"""
